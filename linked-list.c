@@ -61,13 +61,35 @@ void list_filter(struct list_item **pcur, int (*cond)(int))
     }
 }
 
+int list_some(struct list_item *cur, int (*cond)(int))
+{
+    while(cur) {
+        if((*cond)(cur->data))
+            return 1;
+        cur = cur->next;
+    }
+    return 0;
+}
+
+int list_count(struct list_item *cur, int (*cond)(int))
+{
+    int count = 0;
+    while(cur) {
+        if((*cond)(cur->data)) {
+            count++;
+        }
+        cur = cur->next;
+    }
+    return count;
+}
+
 int is_odd(int x) { return x % 2; }
 int is_even(int x) { return x % 2 == 0; }
 
 int main()
 {
     struct list_item *list = NULL;
-    for(int i = 0; i < 10; ++i)
+    for(int i = 0; i < 10; i++)
         list_push(&list, i);
     list_print(list);
     list_filter(&list, &is_odd);
@@ -76,5 +98,8 @@ int main()
     list_print(list);
     list_filter(&list, &is_even);
     list_print(list);
+    printf("is some even: %d\n", list_some(list, &is_even));
+    printf("is some odd: %d\n", list_some(list, &is_odd));
+    printf("count even: %d\n", list_count(list, &is_even));
     return 0;
 }
