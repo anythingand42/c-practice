@@ -93,6 +93,7 @@ int main()
         list_push(&list, i);
     list_print(list);
     list_filter(&list, &is_odd);
+    list_print(list);
     for(int i = 0; i < 10; ++i)
         list_push(&list, i);
     list_print(list);
@@ -101,5 +102,6 @@ int main()
     printf("is some even: %d\n", list_some(list, &is_even));
     printf("is some odd: %d\n", list_some(list, &is_odd));
     printf("count even: %d\n", list_count(list, &is_even));
+    list_free(list);
     return 0;
 }
