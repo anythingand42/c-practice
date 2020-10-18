@@ -26,28 +26,55 @@ int list_pop(struct list_item **phead)
     return data;
 }
 
-void list_print(struct list_item *list)
+void list_print(struct list_item *cur)
 {
-    struct list_item *current = list;
-    while(current) {
-        if (current->next)
-            printf("%d -> ", current->data);
+    while(cur) {
+        if (cur->next)
+            printf("%d -> ", cur->data);
         else
-            printf("%d", current->data);
-        current = current->next;
+            printf("%d", cur->data);
+        cur = cur->next;
     }
     printf("\n");
 }
 
+void list_free(struct list_item *head)
+{
+    struct list_item *tmp;
+    while(head) {
+        tmp = head;
+        head = head->next;
+        free(tmp);
+    }
+}
+
+void list_filter(struct list_item **pcur, int (*cond)(int))
+{
+    while(*pcur) {
+        if(!(*cond)((*pcur)->data)) {
+            struct list_item *tmp = *pcur;
+            *pcur = (*pcur)->next;
+            free(tmp);
+        } else {
+            pcur = &((*pcur)->next);
+        }
+    }
+}
+
+int is_odd(int x) { return x % 2; }
+int is_even(int x) { return x % 2 == 0; }
+
 int main()
 {
     struct list_item *list = NULL;
-    list_push(&list, 1);
-    list_push(&list, 2);
-    list_push(&list, 3);
+    for(int i = 0; i < 10; ++i)
+        list_push(&list, i);
     list_print(list);
-    printf("pop %d\n", list_pop(&list));
-    printf("pop %d\n", list_pop(&list));
+    list_filter(&list, &is_odd);
+    for(int i = 0; i < 10; ++i)
+        list_push(&list, i);
+    list_print(list);
+    list_filter(&list, &is_even);
     list_print(list);
     return 0;
 }
