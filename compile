@@ -1,2 +1,0 @@
-#!/bin/sh
-gcc -Wall -g $1.c -o ./build/$1
