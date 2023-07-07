@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
 
 #define INPUT_MAX_LEN 102
 
